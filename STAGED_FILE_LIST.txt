@@ -40,10 +40,13 @@ firmware/tx/strategy_B/canfd_signalset_64b.h
 firmware/tx/strategy_B/hal_entry.c
 firmware/tx/strategy_C/canfd_signalset_64b.h
 firmware/tx/strategy_C/hal_entry.c
+GITHUB_PRIVATE_PUSH_REPORT.md
 GITHUB_PUSH_READINESS.md
 LICENSE_REVIEW.md
+PRE_PUSH_AUDIT.md
 PUBLIC_FORBIDDEN_FILE_SCAN.csv
 PUBLIC_PATTERN_SCAN.csv
+PUBLIC_RELEASE_PENDING.md
 PUBLIC_RELEASE_CHECKLIST.md
 PUBLIC_SANITIZATION_REPORT.md
 README.md

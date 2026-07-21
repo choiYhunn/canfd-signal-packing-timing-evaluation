@@ -5,11 +5,12 @@ The candidate intentionally excludes final report/presentation PDFs because they
 
 Before publishing those PDFs, a human must review and remove or approve names, student number, email, phone number, laboratory/internal identifiers, signatures, document properties, embedded comments, and administrative form fields.
 
-The final automated scan is recorded after all candidate files are generated. The word `private` in `.gitignore` or boundary documentation is an allowlisted policy term, not a secret.
+The detailed baseline scan was recorded after the 55-file candidate was generated. A governance-aware scan was repeated after adding the required pre-push, public-release-pending, and private-push reports. Terms such as `private`, `secret`, `token`, and identifier examples in audit policy text are allowlisted only when they are clearly non-secret documentation or parser vocabulary.
 
 ## Automated final scan
 
-- Pattern matches: 15
+- Baseline detailed pattern matches: 15 (`PUBLIC_PATTERN_SCAN.csv`)
+- Final requested identifier/credential-pattern matching lines, including governance policy text: 20
 - Non-allowlisted matches: 0
 - Forbidden files: 0
 
