@@ -1,0 +1,10 @@
+{
+  "claim": "80% jitter full ordering A<B<C",
+  "direction_all_pairs": true,
+  "bootstrap_ci_all_pairs_support": true,
+  "all_80pct_pairs_strict_load_matched": false,
+  "pass": false,
+  "rule": "All A-B, B-C, A-C directions and bootstrap CIs plus strict reconstructed-occupancy matching must pass.",
+  "bootstrap_seed": 20260721,
+  "bootstrap_iterations": 20000
+}

@@ -1,0 +1,16 @@
+﻿pattern,file,line,allowlisted,excerpt
+private,.gitignore,24,yes,private/
+private,analysis\config\analysis_config.example.json,2,yes,"  ""input"": ""./data/private_traces"","
+token,analysis\scripts\analyze_fixed2_64b_n10.py,118,yes,    type_token: str
+serial,analysis\scripts\analyze_fixed2_64b_n10.py,229,yes,def excel_serial_to_datetime(value: str) -> datetime | None:
+token,analysis\scripts\analyze_fixed2_64b_n10.py,329,yes,"                token = m.group(""type"").upper()"
+token,analysis\scripts\analyze_fixed2_64b_n10.py,330,yes,"                is_fd = token.startswith(""F"") or ""FD"" in token"
+token,analysis\scripts\analyze_fixed2_64b_n10.py,333,yes,"                                    is_fd and ""B"" in token, is_fd and ""E"" in token,"
+token,analysis\scripts\analyze_fixed2_64b_n10.py,334,yes,"                                    m.group(""direction"").title(), token, line_number))"
+serial,analysis\scripts\analyze_fixed2_64b_n10.py,427,yes,"            start_dt = excel_serial_to_datetime(header[""start_time_raw""])"
+serial,analysis\scripts\analyze_fixed2_64b_n10.py,1207,yes,"               ""- Measurement order: reconstructed from TRC start-time serial/header timestamps."","
+private,firmware\README.md,4,yes,"Only user-authored/custom `src` files from the six final native-DLC TRC projects are included. Renesas FSP SDK sources, generated vendor trees, build outputs, device binaries, and project-local launch logs are excluded. Project configuratio"
+secret,PUBLIC_RELEASE_CHECKLIST.md,11,yes,- [x] Secret-pattern scan executed
+secret,PUBLIC_SANITIZATION_REPORT.md,8,yes,"The final automated scan is recorded after all candidate files are generated. The word `private` in `.gitignore` or boundary documentation is an allowlisted policy term, not a secret."
+private,PUBLIC_SANITIZATION_REPORT.md,8,yes,"The final automated scan is recorded after all candidate files are generated. The word `private` in `.gitignore` or boundary documentation is an allowlisted policy term, not a secret."
+private,sample_data\README.md,4,yes,`synthetic_example.trc`는 공개 가능한 형식 예시로 새로 만든 synthetic 자료이며 실제 실험 결과가 아니다. `expected_output.csv`는 예시 파일의 frame 수와 ID/DLC 확인용 예상값이다. 최종 통계 재현에는 private 120-TRC 원본이 필요하다.

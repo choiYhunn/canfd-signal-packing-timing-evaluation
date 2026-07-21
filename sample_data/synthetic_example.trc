@@ -1,0 +1,8 @@
+;$FILEVERSION=1.1
+;$STARTTIME=0
+; Synthetic CAN-FD example — not measured data
+;   Time          Type ID   Rx/Tx DL  Data
+  1) 0.000000     FB  100  Rx   8   11 22 33 44 55 66 77 88
+  2) 0.005000     FB  100  Rx   8   11 22 33 44 55 66 77 88
+  3) 0.010000     FB  100  Rx   8   11 22 33 44 55 66 77 88
+  4) 0.050000     FB  110  Rx   8   AA BB CC DD EE FF 00 11

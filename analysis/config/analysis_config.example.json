@@ -1,0 +1,14 @@
+{
+  "input": "./data/private_traces",
+  "output": "./analysis_output",
+  "manifest": "./config/manifest.json",
+  "bootstrap_iterations": 20000,
+  "bootstrap_seed": 20260721,
+  "nominal_period_us": 5000,
+  "primary_window": "full",
+  "sensitivity_window": "exclude_first_1s",
+  "frame_loss_candidate_gap_us": 7500,
+  "strict_match_threshold_pp": 0.5,
+  "near_match_threshold_pp": 1.0,
+  "script_version": "1.0.0"
+}
