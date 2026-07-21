@@ -2,13 +2,13 @@
 
 - Local repository: initialized in this public-candidate folder only
 - Git: `git version 2.54.0.windows.1`
-- GitHub CLI (`gh`): unavailable
-- `gh auth status`: not checked because the command is unavailable
+- GitHub CLI (`gh`): 2.96.0 installed after explicit user approval
+- `gh auth status`: authenticated to GitHub.com as `choiYhunn`; HTTPS protocol; credentials in the operating-system keyring
 - Git remote: none configured
-- Remote push: not attempted
+- Remote push: pending private repository creation
 - Large file check: no candidate file exceeds 10 MiB
 - Sensitive-pattern scan: no non-allowlisted match
 - Forbidden-file scan: no finding
 - License: **LICENSE PENDING**
 
-Before any push, a human must approve authorship/citation metadata, public identity, firmware and analysis-code ownership, third-party license obligations, and whether redacted public report/presentation PDFs should be created separately.
+The initial repository must remain private. Public conversion still requires separate human approval of authorship/citation metadata, public identity, firmware and analysis-code ownership, third-party license obligations, final license selection, and whether redacted report/presentation derivatives should be created.

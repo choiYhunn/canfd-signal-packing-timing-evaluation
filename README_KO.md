@@ -41,6 +41,8 @@ A60-C60 jitter 차이는 37.667 us이고 bootstrap CI는 [37.466, 37.857] us다.
 
 모터 안정성, PID 진동, pure bus latency, PCAN actual load, 80% full ordering, blocking 단일 원인을 입증하지 않는다.
 
+부하용 dummy frame은 동일한 TX node에서 생성했으므로, 결과를 순수한 외부 bus contention 효과로 해석할 수 없다.
+
 ## 10. 재현 방법
 
 `analysis/scripts/run_analysis_relative.ps1` 또는 Python script를 사용한다. 최종 수치 재현에는 비공개 120-TRC 원본과 manifest가 필요하다. 공개 sample은 형식 확인용 synthetic data다.
@@ -48,8 +50,8 @@ A60-C60 jitter 차이는 37.667 us이고 bootstrap CI는 [37.466, 37.857] us다.
 ## 11. 저장소 구조와 공개 범위
 
 - `firmware`: 사용자 작성 TX/RX 소스 후보
-- `analysis`: 분석 script, 상대경로 config, summary table, figure
-- `sample_data`: synthetic example
+- [`analysis`](analysis/): 분석 script, 상대경로 config, [summary table](analysis/summary_tables/), [figure](analysis/figures/)
+- [`sample_data`](sample_data/): synthetic example
 - `docs`: architecture, experiment design, limitations
 
 원본 TRC, 원본 Scope CSV, build output, 제출 양식, 개인정보 포함 PDF와 vendor 문서는 공개 후보에서 제외했다.
