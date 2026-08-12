@@ -151,6 +151,10 @@ def main():
     piv_df = pd.DataFrame(piv); w(piv_df, "gap_jitter_n3_summary.csv")
 
     # order effect: variance across seq positions vs across gaps
+    # Descriptive reproducibility helper ONLY. The 3 permuted orders are not a full gap x position
+    # factorial, so these variances are NOT a variance-decomposition estimate of a pure order effect
+    # and are not used as causal/statistical evidence. The robustness statement in the report is based
+    # on the within-gap run-to-run SD (<=0.31 us) instead.
     gap_var = df.groupby("configured_gap_us").jitter_us.mean().var(ddof=1)
     pos_var = df.groupby("seq_position").jitter_us.mean().var(ddof=1)
 
@@ -232,8 +236,12 @@ def write_report(acq_df, df, piv_df, coarse, gap_var, pos_var):
         d = df[df.run==r].set_index("configured_gap_us").jitter_us
         L.append(f"- **{r}**: 238={_f(d[238])}, 240={_f(d[240])}, 244={_f(d[244])}, 250={_f(d[250])} "
                  f"-> 238<240 {d[238]<d[240]}, 240<244 {d[240]<d[244]}, 250<244 {d[250]<d[244]}, 250 lowest {d[250]==d.min()}")
-    L.append(f"\nBetween-gap mean-jitter variance = {gap_var:.1f} us^2; between-sequence-position variance = "
-             f"{pos_var:.3f} us^2 (gap effect >> order/position effect if the former dominates).")
+    L.append("\nEach configured gap was observed at different sequence positions across the three reset runs, "
+             "and the within-gap run-to-run SD remained <=0.31 us. Thus the gap-dependent ordering was robust "
+             "to the three tested sweep orders, with no evidence of a large order/carry-over effect in these "
+             "runs. (The 3 permuted orders are not a full gap x position factorial, so this is a robustness "
+             "check, not a variance-decomposition estimate of a pure order effect.)")
+    _ = (gap_var, pos_var)  # descriptive helper values; intentionally not reported as evidence
 
     L += ["", "## Claim boundary", "",
           "- Repeatable resonance-like timing pattern consistent with the relative timing/commensurability between",

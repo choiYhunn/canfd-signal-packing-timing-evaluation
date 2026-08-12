@@ -35,13 +35,21 @@ Marker 0x7F0 excluded. configured gap vs observed on-wire BG spacing kept separa
 - **r2**: 238=26.66, 240=56.93, 244=76.20, 250=21.62 -> 238<240 True, 240<244 True, 250<244 True, 250 lowest True
 - **r3**: 238=26.27, 240=56.94, 244=76.07, 250=22.12 -> 238<240 True, 240<244 True, 250<244 True, 250 lowest True
 
-Between-gap mean-jitter variance = 660.8 us^2; between-sequence-position variance = 72.932 us^2 (gap effect >> order/position effect if the former dominates).
+Each configured gap was observed at different sequence positions across the three reset runs, and the
+within-gap run-to-run SD remained <=0.31 us. Thus the gap-dependent ordering was robust to the three
+tested sweep orders, with no evidence of a large order/carry-over effect in these runs. (The 3 permuted
+orders are not a full gap x position factorial, so this is a robustness check, not a variance-decomposition
+estimate of a pure order effect; any between-position variance figure in the helper script is descriptive
+only and not used as causal/statistical evidence.)
 
 ## Claim boundary
 
 - Repeatable resonance-like timing pattern consistent with the relative timing/commensurability between
   the 5 ms control period and periodic background traffic. NOT proof of commensurability/arbitration/
   phase-resonance as cause. configured gap != exact wire period; reconstructed occupancy != PCAN load.
+- inter-arrival jitter (= SD of d_k - d_{k-1} for arrival a_k = k*T + d_k) measures cycle-to-cycle delay
+  variation, NOT absolute one-way latency. A jitter valley is NOT a "minimum response time" or best
+  deadline performance; absolute latency was not measured here.
 
 ## Figures
 

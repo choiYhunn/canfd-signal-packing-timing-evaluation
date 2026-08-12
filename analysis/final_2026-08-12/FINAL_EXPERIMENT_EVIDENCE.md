@@ -29,8 +29,11 @@ campaign to the final independent-reset confirmation — can be re-reviewed with
 4. 3-node external-background node added (CONTROL TX / BACKGROUND TX / RX-actuator) to separate
    same-MCU scheduling from bus contention.
 5. **Dataset B**: 3-node matched-load exploratory **n=5** — background gap tuned *per strategy* to match total load.
-6. Confound found: those per-strategy gaps mean A/B/C did not share the same external background cadence.
-7. **Dataset C**: fixed-background confirmatory — **same** configured gap for A/B/C at each level.
+6. Confound found: those per-strategy gaps mean A/B/C did not share the same configured external
+   background cadence.
+7. **Dataset C**: fixed-background confirmatory — **same configured external background-generator input**
+   for A/B/C at each level (configured gap / mode / dummy set / firmware identical; realized on-wire
+   throughput treated as an outcome, not forced equal).
 8. **Dataset D**: full configured-gap response sweep 230–250 µs.
 9. **Dataset E**: independent-reset, order-permuted **n=3** confirmation of the sweep extrema (A strategy).
 10. Hardware experiment complete.
@@ -44,13 +47,19 @@ controlled configured-gap sweep in Dataset D. It is intentionally not included h
 ### Strongly supported (measured, reproduced)
 - **Packing bandwidth effect (real).** Control-frame airtime is a fixed per-strategy constant:
   reconstructed control occupancy **B 4.98 % < C 7.32 % < A 8.40 %** (identical across Datasets C/D).
-- **Large packing *timing* effect does NOT reproduce at a common fixed background.** With the same
-  configured gap, A/B/C 0x100 jitter is essentially equal: BG-L ≈ **34.3 µs**, BG-M ≈ **58–61 µs**,
-  BG-H ≈ **69–72 µs** (Dataset C); same-gap A/B/C spread is mostly **0.7–4.5 µs** across 230–250
-  (Dataset D `same_gap_strategy_spread.csv`).
+- **A large and stable packing-strategy-specific timing separation did not reproduce under a common
+  configured background input.** With the same configured background-generator input, A/B/C 0x100 jitter
+  is close: BG-L ≈ **34.3 µs**, BG-M ≈ **58–61 µs** (with B/C showing some run-to-run variability — B-M
+  SD ≈6.70, C-M SD ≈13.04, Dataset C), BG-H ≈ **69–72 µs**. Across the coarse sweep, **9 of 11 configured
+  gaps showed an A/B/C jitter spread ≤4.5 µs**; isolated larger deviations occurred at 232 µs (spread
+  ≈29.2 µs) and 250 µs (spread ≈11.1 µs) and were not independently replicated as packing effects
+  (Dataset D `same_gap_strategy_spread.csv`). This bounds the packing timing effect as not large/stable;
+  it does not assert the effect is exactly zero.
 - **Repeatable non-monotonic jitter response to the configured background gap.** Over 230–250 µs the
-  0x100 jitter is strongly non-monotonic while reconstructed occupancy changes smoothly/monotonically
-  (≈64.5 → 60.2 %). Extrema reproduce under independent reset and permuted order (Dataset E, n=3, SD ≤0.31 µs).
+  0x100 jitter changes strongly and non-monotonically, whereas reconstructed occupancy shows a gradual
+  overall downward trend as configured gap increases, with small local deviations (i.e. not strictly
+  monotonic; e.g. A 232 ≈64.14 → 234 ≈64.51 %, C 232 ≈64.03 → 234 ≈64.27 %) over the ≈64.5 → 60.2 % range.
+  Extrema reproduce under independent reset and permuted order (Dataset E, n=3, SD ≤0.31 µs).
 - **Mean bus utilization alone does not characterize the timing response.** Points with nearly equal
   reconstructed occupancy differ greatly in jitter (Dataset D `similar_load_comparisons.csv`); e.g.
   A gap238 (occ ≈63.8 %, jitter ≈25) vs A gap242 (occ ≈62.8 %, jitter ≈74).
@@ -62,13 +71,28 @@ controlled configured-gap sweep in Dataset D. It is intentionally not included h
   (5000 / 238 ≈ **21.008** near-integer; 5000 / 250 = **20** exact integer), the near-half-integer gap
   sits at a jitter peak (5000 / 244 ≈ **20.492** near-half-integer). This is an association/consistency
   statement only.
+- Why `configured gap` is a meaningful scheduler input (mechanism plausibility, not proof): in the M mode
+  the generator uses `active_count = 8`, initially staggers the dummy IDs by the configured min gap, and
+  reschedules a transmitted dummy ID to be next due after `min_gap × active_count` — so the configured gap
+  sets the aggregate background release cadence. It is still **not** an exact wire period: mailbox
+  availability, arbitration/contention, and scheduler reseeding make the realized on-wire spacing differ
+  from the configured gap.
+
+### Interpretation boundary — inter-arrival jitter is not latency
+Model each 0x100 arrival as `a_k = k·T + d_k` (T = 5 ms). The measured inter-arrival error is
+`(a_k − a_{k−1}) − T = d_k − d_{k−1}`. So a **low inter-arrival jitter means small cycle-to-cycle delay
+variation, NOT small absolute one-way latency**: a constant per-cycle blocking delay cancels in the
+difference and yields low jitter even if a real latency exists. Therefore do **not** read a jitter valley
+as "minimum response time" or "best deadline performance". This study did not measure absolute one-way
+latency (`Tpwm_sw` is a software-update request time, not a measured PWM edge / actuator response).
 
 ### Not proven (do NOT state as established)
-- CAN arbitration is the direct cause.
+- CAN arbitration is the direct cause; commensurability/resonance is proven.
 - Exact phase-resonance causal proof.
 - `configured min gap` = exact wire-side period.
-- Packing timing effect is exactly zero.
+- Packing timing effect is exactly zero; A/B/C are always identical; strategy has no timing effect.
 - Any one A/B/C strategy is always optimal.
+- Low jitter = low latency; a valley = minimum response time / best deadline performance.
 - Any motor / actuator stability impact.
 
 ## Key numeric tables (all checkable against the CSVs here)
@@ -86,10 +110,18 @@ controlled configured-gap sweep in Dataset D. It is intentionally not included h
 Jitter mean ± SD (µs): A30 15.68±4.52, B30 40.96±1.74, C30 40.43±0.46; **A60 30.22±16.02 (median 23.3;
 run1 anomaly high, run2–5 ≈23), B60 61.61±0.28, C60 24.78±0.65**; A80 71.32, B80 66.86, C80 71.26.
 Per-strategy gaps differed (A60 240 / B60 235 / C60 238 µs) → background-cadence confound.
+Exploratory BG-OFF A/C aggregate jitter means are **not** used for the main inference because individual
+traces contain previously documented rare bus-wide / capture-wide silences (Cbaseline run1 ≈25 ms,
+Abaseline run3 ≈30 ms) that inflate that run's SD; the clean fixed-BG baseline sanity traces are treated
+only as reference. Raw traces and outliers are retained, not removed.
 
 ### Dataset C — fixed-background confirmatory n=5 (`03_.../condition_summary.csv`)
-Jitter mean ± SD (µs): BG-L A34.35/B34.30/C34.32; BG-M A58.67/B58.34/C61.24; BG-H A71.29/B69.03/C71.66.
-Old strategy contrast (B60≫C60) does **not** reproduce when the gap is shared.
+Here A/B/C shared the **same configured external background-generator input** (same configured gap, same
+generator mode, same dummy ID set/payload, same background-node firmware). The generator input was
+controlled identically across A/B/C; the realized on-wire background throughput was treated as an outcome
+of bus interaction rather than forced to be identical. Jitter mean ± SD (µs): BG-L A34.35/B34.30/C34.32;
+BG-M A58.67/B58.34/C61.24; BG-H A71.29/B69.03/C71.66. Old strategy contrast (B60≫C60) does **not**
+reproduce when the configured background input is shared.
 
 ### Dataset D — full gap sweep, jitter µs (`04_.../same_gap_strategy_spread.csv`)
 | gap | A | B | C | 5000/gap |
@@ -105,7 +137,8 @@ Old strategy contrast (B60≫C60) does **not** reproduce when the gap is shared.
 | 246 | 67.4 | 65.5 | 66.9 | 20.325 |
 | 248 | 48.5 | 47.8 | 45.6 | 20.161 |
 | 250 | 22.7 | 24.6 | 33.7 | 20.000 (exact integer, valley) |
-Reconstructed total occupancy is smooth ≈64.5 → 60.2 %; jitter is strongly non-monotonic.
+Reconstructed total occupancy shows a gradual overall downward trend (≈64.5 → 60.2 %) with small local
+deviations (not strictly monotonic); jitter changes strongly and non-monotonically.
 
 ### Dataset E — independent-reset, order-permuted confirmation n=3 (`05_.../gap_jitter_n3_summary.csv`)
 | gap | r1 | r2 | r3 | mean ± SD |
@@ -114,8 +147,11 @@ Reconstructed total occupancy is smooth ≈64.5 → 60.2 %; jitter is strongly n
 | 240 | 56.65 | 56.93 | 56.94 | 56.84 ± 0.16 |
 | 244 | 75.61 | 76.20 | 76.07 | 75.96 ± 0.31 |
 | 250 | 21.76 | 21.62 | 22.12 | 21.83 ± 0.25 |
-Sequences: r1 238→240→244→250, r2 250→244→240→238, r3 244→238→250→240 (each gap measured at a different
-sequence position; within-gap SD ≤0.31 µs → order/carry-over effect ≪ gap effect).
+Sequences: r1 238→240→244→250, r2 250→244→240→238, r3 244→238→250→240. Each configured gap was observed
+at different sequence positions across the three reset runs, and within-gap run-to-run SD remained
+≤0.31 µs. Thus the gap-dependent ordering was **robust to the three tested sweep orders, with no evidence
+of a large order/carry-over effect in these runs**. (These 3 permuted orders are not a full factorial of
+gap × position, so this is a robustness check, not a variance-decomposition estimate of a pure order effect.)
 
 Accurate change wording: **238 → 240** raises jitter ≈ **26.4 → 56.8 µs (≈ +30 µs)**; **240 → 244**
 rises further to ≈ **76.0 µs**; **250** returns to ≈ **21.8 µs**. (Do not phrase this as "a 2 µs change
