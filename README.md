@@ -2,6 +2,9 @@
 
 [한국어](README.md) | [English](README.en.md)
 
+> [!IMPORTANT]
+> **이 저장소는 2026년 7월 초기 실험 캠페인 기록입니다.** 이 캠페인에서는 같은 TX 노드가 부하용 dummy frame도 함께 보냈습니다. 이후 독립 Background TX 노드를 둔 3-node 구성으로 다시 실험했고, 부하를 맞추는 과정에서 배경 트래픽 생성 간격이 함께 달라지는 교란을 확인했습니다. 그래서 전략 간 큰 지터 차이를 패킹 효과로 해석하지 않도록 결론을 고쳤고, 이 결과를 2026 한국자동차공학회 추계학술대회 Full Paper로 **제출(Submitted, 2026-09)**했습니다. 아래 6절 수치는 최종 결론이 아니라 **초기 관찰**로 읽어야 합니다. 최종 연구 요약은 [포트폴리오 README](https://github.com/choiYhunn/2026-autonomous-driving-hackathon-portfolio/blob/main/CAN-FD_%EC%8B%A0%ED%98%B8%ED%8C%A8%ED%82%B9_%EC%8B%A4%EC%8B%9C%EA%B0%84%EC%84%B1_%EC%97%B0%EA%B5%AC%28%EC%B5%9C%EC%9A%A9%ED%9B%88%29/README.md)에 있습니다.
+
 > 동일한 64 B mixed-period workload를 A/B/C 방식으로 패킹했을 때 **RX inter-arrival jitter**와 model 기반 reconstructed occupancy가 어떻게 달라지는지 RA6M5 TX/RX와 PCAN trace로 평가한 연구 저장소입니다.
 
 | 항목 | 내용 |
@@ -10,7 +13,7 @@
 | 실험 장치 | RA6M5 TX/RX, CAN-FD, PCAN trace, 별도 oscilloscope campaign |
 | 주 지표 | 0x100 RX inter-arrival jitter |
 | 데이터 | 3 strategies × 4 loads × 10 runs = 120 TRC |
-| 상태 | 비공개 연구 저장소, 외부 공개·license 승인 대기 |
+| 상태 | 초기 캠페인 기록(최종 논문 이전). 공동 연구진 공개 동의 확인(2026-10-21), 소프트웨어 license는 미선정 |
 
 ## 빠른 탐색
 
@@ -100,7 +103,7 @@ flowchart TD
 - strict-matched reconstructed occupancy 차이: **-0.091382 percentage point**
 - 80% 조건의 A/B/C full-ordering claim gate: **FAIL** — 완전한 순서를 주장하지 않음
 
-위 수치는 비공개 원본 TRC와 manifest가 있어야 재현됩니다. 공개 후보 sample은 형식 확인용 synthetic data일 뿐 최종 통계를 재현하지 않습니다.
+위 수치는 초기 캠페인의 관찰값이며, 이후 3-node 재실험에서 전략 간 큰 차이는 패킹 효과로 확인되지 않았습니다. 위 수치는 비공개 원본 TRC와 manifest가 있어야 재현됩니다. 공개 후보 sample은 형식 확인용 synthetic data일 뿐 최종 통계를 재현하지 않습니다.
 
 ## 7. 재현 방법
 
@@ -144,4 +147,4 @@ python analysis/scripts/analyze_fixed2_64b_n10.py \
 
 ## 10. Attribution 및 공개 상태
 
-이 저장소는 팀·연구실 공동 연구 자료이며 현재 **LICENSE PENDING** 상태입니다. 외부 공개 전 작성자·관리자 승인, firmware 소유권, 파생 수치·figure의 공개 범위와 제3자 license를 확인해야 합니다. 실제 TRC, scope 원본, FSP 생성물, 연구실 내부 문서와 개인정보 자료는 외부 공개 대상이 아닙니다.
+이 저장소는 팀·연구실 공동 연구 자료입니다. 저장소 소유자가 2026-10-21 공동 연구진의 공개 동의를 확인했습니다. 소프트웨어 license는 선정하지 않았으므로 **All rights reserved**이며, 열람은 가능하지만 재사용 권한은 부여하지 않습니다. 실제 TRC, scope 원본, FSP 생성물, 연구실 내부 문서와 개인정보 자료는 외부 공개 대상이 아닙니다.

@@ -2,6 +2,9 @@
 
 [한국어](README.md) | [English](README.en.md)
 
+> [!IMPORTANT]
+> **This repository records the preliminary campaign from July 2026**, in which the same TX node also sent the dummy load frames. The study was then repeated with a three-node setup and an independent background TX node. That work found a confound: matching the load had also changed the background-traffic generation gap. The conclusion was therefore revised so that large jitter differences between strategies are not attributed to packing, and the result was **submitted** as a full paper to the KSAE 2026 Annual Autumn Conference (Sep 2026). Read the numbers in Section 6 as **early observations**, not the final conclusion. The final study summary is in the [portfolio README](https://github.com/choiYhunn/2026-autonomous-driving-hackathon-portfolio/blob/main/CAN-FD_%EC%8B%A0%ED%98%B8%ED%8C%A8%ED%82%B9_%EC%8B%A4%EC%8B%9C%EA%B0%84%EC%84%B1_%EC%97%B0%EA%B5%AC%28%EC%B5%9C%EC%9A%A9%ED%9B%88%29/README.en.md).
+
 > A study evaluating how three packings of the same 64-byte mixed-period workload affect **RX inter-arrival jitter** and model-based reconstructed occupancy, using RA6M5 TX/RX nodes and PCAN traces.
 
 | Item | Details |
@@ -10,7 +13,7 @@
 | Setup | RA6M5 TX/RX, CAN-FD, PCAN traces, separate oscilloscope campaign |
 | Primary metric | 0x100 RX inter-arrival jitter |
 | Dataset | 3 strategies × 4 loads × 10 runs = 120 TRC files |
-| Status | Private research repository; publication and license approval pending |
+| Status | Preliminary-campaign record (before the final paper). Co-researchers’ consent to publish confirmed by the owner (2026-10-21); no software license selected |
 
 ## Quick Navigation
 
@@ -100,7 +103,7 @@ The Git history begins at the release-candidate packaging stage and does not pro
 - Strict-matched reconstructed-occupancy difference: **-0.091382 percentage point**
 - 80% A/B/C full-ordering claim gate: **FAIL** — no complete ordering claim is made
 
-Reproduction of these values requires the private source TRCs and manifest. The candidate public sample validates format only and cannot reproduce the final statistics.
+These are preliminary-campaign observations; in the later three-node re-test, large differences between strategies were not confirmed as a packing effect. Reproduction of these values requires the private source TRCs and manifest. The candidate public sample validates format only and cannot reproduce the final statistics.
 
 ## 7. Reproduction
 
@@ -144,4 +147,4 @@ python analysis/scripts/analyze_fixed2_64b_n10.py \
 
 ## 10. Attribution and Publication Status
 
-This repository contains joint team/laboratory research and is currently **LICENSE PENDING**. Author/maintainer approval, firmware ownership, permission for derived figures/values, and third-party licenses must be resolved before external release. Real TRCs, scope source data, FSP-generated artifacts, internal laboratory documents, and personal records are not approved for public distribution.
+This repository contains joint team/laboratory research. The repository owner confirmed the co-researchers’ consent to publish on 2026-10-21. No software license has been selected, so it is **All rights reserved**: it may be viewed, but no reuse permission is granted. Real TRCs, scope source data, FSP-generated artifacts, internal laboratory documents, and personal records are not approved for public distribution.
