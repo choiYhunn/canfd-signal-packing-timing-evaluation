@@ -1,0 +1,12 @@
+﻿pair,occ_a,occ_b,occ_diff_pp,jitter_a,jitter_b,jitter_diff_us,src_a,src_b
+Bg240_vs_Cg242,60.54,62.36,1.82,58.34,74.01,15.67,confirmatory_n5_mean,sweep_n1_20s
+Ag240_vs_Cg242,63.34,62.36,0.98,58.67,74.01,15.34,confirmatory_n5_mean,sweep_n1_20s
+Ag242_vs_Cg240,62.8,62.94,0.14,73.55,61.24,12.32,sweep_n1_20s,confirmatory_n5_mean
+Ag240_vs_Cg230,63.34,65.07,1.73,58.67,69.47,10.8,confirmatory_n5_mean,sweep_n1_20s
+Ag240_vs_Bg230,63.34,62.84,0.5,58.67,68.33,9.66,confirmatory_n5_mean,sweep_n1_20s
+Bg230_vs_Cg240,62.84,62.94,0.1,68.33,61.24,7.09,sweep_n1_20s,confirmatory_n5_mean
+Bg230_vs_Cg242,62.84,62.36,0.48,68.33,74.01,5.68,sweep_n1_20s,sweep_n1_20s
+Ag242_vs_Bg230,62.8,62.84,0.04,73.55,68.33,5.23,sweep_n1_20s,sweep_n1_20s
+Ag240_vs_Cg240,63.34,62.94,0.4,58.67,61.24,2.56,confirmatory_n5_mean,confirmatory_n5_mean
+Ag230_vs_Cg230,65.53,65.07,0.46,68.03,69.47,1.44,sweep_n1_20s,sweep_n1_20s
+Ag242_vs_Cg242,62.8,62.36,0.44,73.55,74.01,0.46,sweep_n1_20s,sweep_n1_20s

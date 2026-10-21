@@ -1,0 +1,11 @@
+﻿strategy,configured_gap_us,reason,priority
+A,230,only fully-captured GROUP1 point; anchor,captured(n=1)
+A,242,only fully-captured GROUP2 point; anchor,captured(n=1)
+B,230,only fully-captured GROUP1 point; anchor,captured(n=1)
+B,242,only fully-captured GROUP2 point; anchor,captured(n=1)
+C,230,only fully-captured GROUP1 point; anchor,captured(n=1)
+C,242,only fully-captured GROUP2 point; anchor,captured(n=1)
+A/B/C,234,never captured; 234-240 is the region of the old 235/238/240 concern,RECAPTURE_HIGH
+A/B/C,236,never captured; 234-240 is the region of the old 235/238/240 concern,RECAPTURE_HIGH
+A/B/C,238,never captured; 234-240 is the region of the old 235/238/240 concern,RECAPTURE_HIGH
+A/B/C,240,never captured; 234-240 is the region of the old 235/238/240 concern,RECAPTURE_HIGH

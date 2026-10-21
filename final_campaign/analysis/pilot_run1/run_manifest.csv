@@ -1,0 +1,13 @@
+﻿filename,strategy,target,run,dummy_gap_us,duration_s,actual_pcan_mean_load,reconstructed_occupancy_pct,background_fps,notes
+a1_1.trc,A,30,1,627,32.232,,29.7146,1593.58,n=1 pilot; PCAN Listen-Only; external background TX node; occupancy is reconstructed (not PCAN actual Mean Load)
+a2_1.trc,A,60,1,240,21.002,,63.3437,4101.57,n=1 pilot; PCAN Listen-Only; external background TX node; occupancy is reconstructed (not PCAN actual Mean Load)
+a3_1.trc,A,80,1,170,15.904,,83.2856,5627.84,n=1 pilot; PCAN Listen-Only; external background TX node; occupancy is reconstructed (not PCAN actual Mean Load)
+a0_1.trc,A,baseline,1,,30.646,,8.4035,0.0,n=1 pilot; PCAN Listen-Only; external background TX node; occupancy is reconstructed (not PCAN actual Mean Load)
+b1_1.trc,B,30,1,616,31.001,,26.6559,1620.79,n=1 pilot; PCAN Listen-Only; external background TX node; occupancy is reconstructed (not PCAN actual Mean Load)
+b2_1.trc,B,60,1,235,22.449,,61.6972,4234.46,n=1 pilot; PCAN Listen-Only; external background TX node; occupancy is reconstructed (not PCAN actual Mean Load)
+b3_1.trc,B,80,1,168,16.401,,83.1075,5877.12,n=1 pilot; PCAN Listen-Only; external background TX node; occupancy is reconstructed (not PCAN actual Mean Load)
+b0_1.trc,B,baseline,1,,30.891,,4.9795,0.0,n=1 pilot; PCAN Listen-Only; external background TX node; occupancy is reconstructed (not PCAN actual Mean Load)
+c1_1.trc,C,30,1,617,30.491,,28.9821,1620.04,n=1 pilot; PCAN Listen-Only; external background TX node; occupancy is reconstructed (not PCAN actual Mean Load)
+c2_1.trc,C,60,1,238,22.83,,63.3082,4180.25,n=1 pilot; PCAN Listen-Only; external background TX node; occupancy is reconstructed (not PCAN actual Mean Load)
+c3_1.trc,C,80,1,170,17.022,,82.8177,5674.65,n=1 pilot; PCAN Listen-Only; external background TX node; occupancy is reconstructed (not PCAN actual Mean Load)
+c0_1.trc,C,baseline,1,,31.176,,7.3113,0.0,n=1 pilot; PCAN Listen-Only; external background TX node; occupancy is reconstructed (not PCAN actual Mean Load)

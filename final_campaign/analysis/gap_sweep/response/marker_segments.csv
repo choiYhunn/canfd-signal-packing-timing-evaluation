@@ -1,0 +1,13 @@
+﻿file,strategy,group,index,configured_gap_us,marker_type,marker_t_ms,active_count
+A_gap230_240.trc,A,1,0,230,START,2115.941,8
+A_gap230_240.trc,A,1,1,232,START,24973.884,8
+A_gap242_250.trc,A,2,0,242,START,1966.403,8
+A_gap242_250.trc,A,2,1,244,START,24813.033,8
+B_gap230_240.trc,B,1,0,230,START,4916.345,8
+B_gap230_240.trc,B,1,1,232,START,27766.156,8
+B_gap242_250.trc,B,2,0,242,START,2501.818,8
+B_gap242_250.trc,B,2,1,244,START,25335.928,8
+C_gap230_240.trc,C,1,0,230,START,2106.081,8
+C_gap230_240.trc,C,1,1,232,START,24960.235,8
+C_gap242_250.trc,C,2,0,242,START,2946.928,8
+C_gap242_250.trc,C,2,1,244,START,25787.865,8

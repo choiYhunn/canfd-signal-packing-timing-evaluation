@@ -1,0 +1,13 @@
+﻿file,strategy,group,index,configured_gap_us,usable_window_s,required_s,enough_window,total_frames,frame_0x100,bg_frames,esi,error_frames,layout_ok,payload_ok,obs_0x100_dlc,gap6,gap10,qc_status,note
+A_gap230_240.trc,A,1,0,230,20.0,20.0,True,98496,4000,85296,0,0,True,True,8,0,0,PASS,
+A_gap230_240.trc,A,1,1,232,0.795,20.0,False,3831,159,3306,0,0,True,True,8,0,0,FAIL,TRUNCATED: only 0.80s available after 2s settle (<20s); capture ended early
+A_gap242_250.trc,A,2,0,242,20.0,20.0,True,94410,4000,81210,0,0,True,True,8,0,0,PASS,
+A_gap242_250.trc,A,2,1,244,1.024,20.0,False,4812,204,4140,0,0,True,True,8,0,0,FAIL,TRUNCATED: only 1.02s available after 2s settle (<20s); capture ended early
+B_gap230_240.trc,B,1,0,230,20.0,20.0,True,90797,4000,86397,0,0,True,True,32,0,0,PASS,
+B_gap230_240.trc,B,1,1,232,1.205,20.0,False,5425,241,5160,0,0,True,True,32,0,0,FAIL,TRUNCATED: only 1.21s available after 2s settle (<20s); capture ended early
+B_gap242_250.trc,B,2,0,242,20.0,20.0,True,86708,4000,82308,0,0,True,True,32,0,0,PASS,
+B_gap242_250.trc,B,2,1,244,1.648,20.0,False,7096,329,6734,0,0,True,True,32,0,0,FAIL,TRUNCATED: only 1.65s available after 2s settle (<20s); capture ended early
+C_gap230_240.trc,C,1,0,230,20.0,20.0,True,90241,3999,86242,0,0,True,True,64,0,0,PASS,
+C_gap230_240.trc,C,1,1,232,1.616,20.0,False,7162,323,6839,0,0,True,True,64,0,0,FAIL,TRUNCATED: only 1.62s available after 2s settle (<20s); capture ended early
+C_gap242_250.trc,C,2,0,242,20.0,20.0,True,86189,4000,82189,0,0,True,True,64,0,0,PASS,
+C_gap242_250.trc,C,2,1,244,2.525,20.0,False,10815,505,10310,0,0,True,True,64,0,0,FAIL,TRUNCATED: only 2.52s available after 2s settle (<20s); capture ended early
