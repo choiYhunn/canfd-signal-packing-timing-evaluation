@@ -1,0 +1,8 @@
+generated_at_local=2026-08-11T13:01:51.673341+09:00
+platform=Windows-11-10.0.26200-SP0
+python_version=3.13.8
+numpy==2.5.1
+pandas==3.0.3
+reused_module=<private>\trace_fixed2\analysis_n10\analyze_fixed2_64b_n10.py
+reused_module_sha256=1E7ADD28298090340E96493E8C8996ACB6820854CDEEE5BFCE6C6BBE8C98C572
+design=3x4x1 (n=1 per condition); no bootstrap; no significance test

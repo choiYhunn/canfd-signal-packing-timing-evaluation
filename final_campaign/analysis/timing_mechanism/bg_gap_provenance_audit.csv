@@ -1,0 +1,9 @@
+﻿file,run,configured_gap_us,observed_bg_spacing_median_us,observed_bg_spacing_mode_us,observed_bg_spacing_iqr_us,observed_bg_spacing_p10_us,observed_bg_spacing_p90_us,n_bg_ids,n_bg_frames
+a2_1.trc,1,UNKNOWN(nominal snapshot=240; not confirmable per-run from TRC),240.0,240,6.0,176.0,246.0,8,86140
+a2_2.trc,2,UNKNOWN(nominal snapshot=240; not confirmable per-run from TRC),238.0,240,10.0,170.0,247.0,8,126726
+a2_3.trc,3,UNKNOWN(nominal snapshot=240; not confirmable per-run from TRC),238.0,240,10.0,170.0,247.0,8,125728
+a2_4.trc,4,UNKNOWN(nominal snapshot=240; not confirmable per-run from TRC),237.0,240,9.0,170.0,247.0,8,126146
+a2_5.trc,5,UNKNOWN(nominal snapshot=240; not confirmable per-run from TRC),238.0,240,9.0,168.40000000000146,247.0,8,127066
+a2_6.trc,6,UNKNOWN(nominal snapshot=240; not confirmable per-run from TRC),238.0,240,9.0,169.0,247.0,8,127062
+a2_7.trc,7,UNKNOWN(nominal snapshot=240; not confirmable per-run from TRC),238.0,240,10.0,168.0,247.0,8,125884
+a2_8.trc,8,UNKNOWN(nominal snapshot=240; not confirmable per-run from TRC),238.0,240,9.0,169.0,247.0,8,131549
