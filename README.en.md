@@ -4,7 +4,7 @@
 
 We measured CAN-FD receive inter-arrival jitter for three ways of packing the same 64-byte mixed-period workload, using Renesas RA6M5 nodes and PCAN traces.
 
-The root directory records the **initial two-node campaign (July 2026)**. In the later [three-node follow-up](final_campaign), the original strategy-dependent jitter gap did not reproduce under common background conditions. The early comparison had changed the background-generation interval as well as packing. **The three-node follow-up governs the final interpretation.** A full paper was submitted to the 2026 KSAE Autumn Conference.
+The root directory records the **initial two-node campaign (July 2026)**. In the later [three-node follow-up](final_campaign), the original strategy-dependent jitter gap did not reproduce under common background conditions. The early comparison had changed the background-generation interval as well as packing. **The three-node follow-up governs the final interpretation.** A full paper was accepted for presentation at the 2026 KSAE Autumn Conference; first author Jaeho Shin is scheduled to present.
 
 To reproduce the published summary figures: `python tools/verify_headline_numbers.py`.
 
