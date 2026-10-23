@@ -2,10 +2,11 @@
 
 [한국어](README.md) | [English](README.en.md)
 
-> [!IMPORTANT]
-> **이 저장소는 2026년 7월 초기 실험 캠페인 기록입니다.** 이 캠페인에서는 같은 TX 노드가 부하용 dummy frame도 함께 보냈습니다. 이후 독립 Background TX 노드를 둔 3-node 구성으로 다시 실험했고, 부하를 맞추는 과정에서 배경 트래픽 생성 간격이 함께 달라지는 교란을 확인했습니다. 그래서 전략 간 큰 지터 차이를 패킹 효과로 해석하지 않도록 결론을 고쳤고, 이 결과를 2026 한국자동차공학회 추계학술대회 Full Paper로 **제출(Submitted, 2026-09)**했습니다. 아래 6절 수치는 최종 결론이 아니라 **초기 관찰**로 읽어야 합니다. 3-node 재실험과 교란 확인 과정, 최종 결론의 근거는 [`final_campaign/`](final_campaign)에 있으며, 두 캠페인의 핵심 수치는 `python tools/verify_headline_numbers.py`로 공개 요약표에서 다시 계산할 수 있습니다.
+같은 64 B 신호를 A/B/C 세 방식으로 패킹하고, CAN-FD 수신 프레임의 도착 간격 지터를 측정했습니다. Renesas RA6M5와 PCAN 로그를 사용했습니다.
 
-> 동일한 64 B mixed-period workload를 A/B/C 방식으로 패킹했을 때 **RX inter-arrival jitter**와 model 기반 reconstructed occupancy가 어떻게 달라지는지 RA6M5 TX/RX와 PCAN trace로 평가한 연구 저장소입니다.
+이 폴더는 **초기 2-node 실험(2026년 7월)**을 기록합니다. 이후 배경 트래픽 송신 노드를 분리한 [3-node 재실험](final_campaign)에서는 초기 전략별 지터 차이가 그대로 재현되지 않았습니다. 전략별 배경 트래픽 생성 간격이 달랐던 것이 비교 조건을 교란했습니다. **최종 해석은 3-node 재실험 기준**입니다. 관련 연구는 2026 한국자동차공학회 추계학술대회에 Full Paper로 제출했습니다.
+
+수치 확인: `python tools/verify_headline_numbers.py` (공개 요약 CSV 기준)
 
 | 항목 | 내용 |
 |---|---|
@@ -15,7 +16,7 @@
 | 데이터 | 3 strategies × 4 loads × 10 runs = 120 TRC |
 | 상태 | 초기 캠페인 기록(최종 논문 이전). 공동 연구진 공개 동의 확인(2026-10-21), 소프트웨어 license는 미선정 |
 
-## 빠른 탐색
+## 파일 안내
 
 - [`firmware/`](firmware): A/B/C TX/RX 실험 source 후보
 - [`analysis/`](analysis): parser, QC, 통계, figure와 summary table
@@ -24,11 +25,11 @@
 - [`sample_data/`](sample_data): 실제 측정이 아닌 synthetic format sample
 - [`LICENSE_REVIEW.md`](LICENSE_REVIEW.md): 저작권·공개 상태
 
-## 1. 연구 목적
+## 연구 목적
 
 주기가 다른 signal을 여러 CAN-FD frame으로 나누거나 한 frame에 통합했을 때 수신 간격의 jitter와 전송 점유 형태가 어떻게 달라지는지 비교합니다. 목표는 특정 전략의 보편적 우위를 주장하는 것이 아니라, **동일 payload와 통제된 조건에서 관측된 차이와 그 해석 범위를 재현 가능하게 기록하는 것**입니다.
 
-## 2. 패킹 전략
+## 패킹 전략
 
 | 전략 | 5 ms signal group | 50 ms signal group | 개념 |
 |---|---|---|---|
@@ -38,7 +39,7 @@
 
 동일 ID의 반복 payload는 byte-identical하게 고정해 payload에 따른 bit-stuffing pattern 차이를 가능한 범위에서 통제했습니다.
 
-## 3. 실험 구조
+## 실험 구조
 
 ```mermaid
 flowchart LR
@@ -57,7 +58,7 @@ flowchart LR
     K["Separate oscilloscope campaign"] --> L["Tpre / Ttx / Trx / Tpwm marker delay"]
 ```
 
-### 분석 흐름
+### 로그 분석
 
 ```mermaid
 flowchart TD
@@ -73,7 +74,7 @@ flowchart TD
     I --> J["Tables · figures · limitations"]
 ```
 
-## 4. My Contribution
+## 담당한 작업
 
 - TRC parsing, run-level QC, 통계·figure 생성 pipeline 구성과 결과 검토
 - 파일명이 아니라 실제 timestamp, CAN ID, DLC, payload와 bitrate를 이용한 조건 확인
@@ -84,7 +85,7 @@ flowchart TD
 
 현재 Git history는 공개 후보 package를 만든 시점부터 시작하므로 firmware와 분석 source 전체의 최초 작성자를 증명하지 않습니다. 공동 연구 source를 단독 저작물로 주장하지 않습니다.
 
-## 5. 주요 문제와 해결
+## 주요 문제와 해결
 
 | 문제 | 해결 | 효과 |
 |---|---|---|
@@ -94,7 +95,7 @@ flowchart TD
 | TRC와 scope가 다른 campaign | source·측정 정의를 별도 기술 | 서로 다른 지연을 one-way latency로 혼동하지 않음 |
 | dummy traffic도 동일 TX node에서 생성 | 명시적인 contention 한계 기록 | 외부 다중 node 경합으로 과도하게 일반화하지 않음 |
 
-## 6. 검증과 결과
+## 검증과 결과
 
 - 3 strategies × 4 conditions × 10 runs, 총 120 TRC의 layout/payload/QC gate 통과
 - A60 RX inter-arrival jitter: **59.764 μs**
@@ -105,7 +106,7 @@ flowchart TD
 
 위 수치는 초기 캠페인의 관찰값이며, 이후 3-node 재실험에서 전략 간 큰 차이는 패킹 효과로 확인되지 않았습니다. 위 수치는 비공개 원본 TRC와 manifest가 있어야 재현됩니다. 공개 후보 sample은 형식 확인용 synthetic data일 뿐 최종 통계를 재현하지 않습니다.
 
-## 7. 재현 방법
+## 재현 방법
 
 [`sample_data/synthetic_example.trc`](sample_data/synthetic_example.trc)와 [`expected_output.csv`](sample_data/expected_output.csv)는 parser 입력 형식과 예상 ID/DLC·frame count를 검토하기 위한 자료입니다. 이 sample만으로 최종 분석은 실행되지 않습니다.
 
@@ -120,7 +121,7 @@ python analysis/scripts/analyze_fixed2_64b_n10.py \
   --seed 20260721
 ```
 
-## 8. 저장소 구조
+## 저장소 구조
 
 ```text
 .
@@ -137,7 +138,7 @@ python analysis/scripts/analyze_fixed2_64b_n10.py \
 └─ LICENSE_REVIEW.md
 ```
 
-## 9. 측정 한계
+## 측정 한계
 
 1. 주 지표는 **RX inter-arrival jitter**이며 송신부터 수신까지의 one-way latency가 아닙니다.
 2. **Reconstructed occupancy**는 frame length와 bitrate 가정으로 계산한 값이며 PCAN actual measured load가 아닙니다.
@@ -146,6 +147,6 @@ python analysis/scripts/analyze_fixed2_64b_n10.py \
 5. Motor stability, PID 진동과 실제 actuator response를 입증하지 않습니다.
 6. WCRT(최악 응답 시간)는 분석하지 않았고, PCAN 실측 bus load는 run 표에 저장되지 않았습니다(모든 부하 값은 재구성 점유율).
 
-## 10. Attribution 및 공개 상태
+## Attribution 및 공개 상태
 
 이 저장소는 팀·연구실 공동 연구 자료입니다. 저장소 소유자가 2026-10-21 공동 연구진의 공개 동의를 확인했습니다. 소프트웨어 license는 선정하지 않았으므로 **All rights reserved**이며, 열람은 가능하지만 재사용 권한은 부여하지 않습니다. 실제 TRC, scope 원본, FSP 생성물, 연구실 내부 문서와 개인정보 자료는 외부 공개 대상이 아닙니다.
