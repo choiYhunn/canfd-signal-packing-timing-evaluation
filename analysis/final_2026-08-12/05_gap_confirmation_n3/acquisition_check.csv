@@ -1,0 +1,4 @@
+﻿run,file,duration_s,total_frames,markers,start,end,decoded_sequence
+r1,A_confirm_r1.trc,135.6,626757,5,4,1,238/240/244/250
+r2,A_confirm_r2.trc,135.5,626753,5,4,1,250/244/240/238
+r3,A_confirm_r3.trc,136.3,627281,5,4,1,244/238/250/240
