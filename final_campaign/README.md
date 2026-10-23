@@ -2,13 +2,11 @@
 
 [루트 README(초기 캠페인)](../README.md) · [English](#english-summary)
 
-> [!IMPORTANT]
-> 이 폴더는 저장소 루트의 **초기(2-node) 캠페인** 이후에 수행한 **최종(3-node) 재실험**의 공개 가능한 source·분석 산출물입니다.
-> 초기 캠페인에서는 같은 TX 노드가 부하용 dummy frame도 함께 보냈기 때문에, 전략 간에 관측된 큰 수신 지터 차이를 패킹 효과로 단정하기 어려웠습니다.
-> 그래서 독립 **Background TX 노드**를 둔 3-node 구성으로 다시 측정했고, 부하를 맞추는 과정에서 **배경 트래픽 생성 간격(gap)이 함께 변하면서 도착 간격 지터를 교란**한다는 것을 확인했습니다.
-> 결론은 "특정 패킹 전략이 지터를 줄인다"가 아니라 **"관측된 큰 차이는 패킹 단독 효과가 아니라 배경 트래픽의 시간 구조에서 비롯된다"**로 정정되었고, 이 결과를 **2026 한국자동차공학회 추계학술대회 Full Paper로 제출(Submitted, 2026-09)**했습니다.
+이 폴더에는 초기 2-node 실험 이후 진행한 **독립 배경 송신 노드 기반 3-node 재실험**의 코드와 분석 결과를 정리했습니다.
 
-## 1. 왜 3-node인가
+초기에는 패킹 전략에 따라 수신 지터가 크게 달랐지만, 전략별로 배경 트래픽 생성 간격도 달랐습니다. 이를 통제한 재실험에서는 큰 전략 차이가 재현되지 않았고, 대신 배경 간격에 따른 지터 변화를 확인했습니다. 관련 연구는 2026 한국자동차공학회 추계학술대회 Full Paper로 제출했습니다.
+
+## 왜 3-node인가
 
 | 측면 | 초기 2-node (루트) | 최종 3-node (`final_campaign/`) |
 |---|---|---|
@@ -17,7 +15,7 @@
 | 측정 | PCAN Listen-Only, 고정 payload | 동일 (PCAN Listen-Only, byte-identical 고정 payload) |
 | 데이터 | 3전략 × 4부하 × 10 run = 120 TRC (n=10) | 파일럿 n=1(12조건) → 반복 n=5 → gap sweep → fixed-BG 확인 |
 
-## 2. 하위 분석 (각 폴더가 독립 산출물)
+## 하위 분석 (각 폴더가 독립 산출물)
 
 | 폴더 | 내용 | 비고 |
 |---|---|---|
@@ -28,11 +26,11 @@
 | [`analysis/gap_sweep/`](analysis/gap_sweep) | 배경 gap을 직접 쓸어가며 지터 반응 측정 | confirm / response / response_full |
 | [`firmware/`](firmware) | 3-node용 사용자 작성 src (FSP 제외) | 아래 3절 |
 
-## 3. firmware
+## firmware
 
 [`firmware/`](firmware)에는 3-node 구성에 사용한 **사용자 작성 `src` 파일만** 포함합니다 (`hal_entry.c`, `canfd_signalset_64b.h`, 역할 분리용 `three_node_experiment_config.h`). Renesas FSP 생성 트리(`ra/`, `ra_gen/`), 빌드 산출물, 디바이스 바이너리, IDE 메타데이터는 공개 대상이 아닙니다. 자세한 내용은 [`firmware/README.md`](firmware/README.md).
 
-## 4. 결론까지의 근거 (60 % 목표 부하, 0x100 inter-arrival jitter)
+## 결론까지의 근거 (60 % 목표 부하, 0x100 inter-arrival jitter)
 
 아래 수치는 모두 이 저장소의 요약표에서 나온 값이며, [`../tools/verify_headline_numbers.py`](../tools/verify_headline_numbers.py)가 CSV에서 다시 계산해 확인합니다.
 
@@ -53,7 +51,7 @@
 
 > **정정 (2026-10-23):** 이 절의 이전 버전은 "단일 프레임 패킹(C)은 beat에 둔감"이라고 적었습니다. 이는 철회된 해석에서 온 문장이고, ④에서 C도 gap에 크게 반응하므로 삭제했습니다.
 
-## 5. 측정한 것과 하지 않은 것
+## 측정한 것과 하지 않은 것
 
 | 지표 | 정의 | 이 연구에서 |
 |---|---|---|
@@ -65,7 +63,7 @@
 
 PCAN timestamp는 bus monitor가 본 도착 시각이며 SOF나 application release 시각이 아닙니다.
 
-## 6. 재현 범위
+## 재현 범위
 
 | 범위 | 공개 자료만으로 | 방법 |
 |---|---|---|
@@ -75,7 +73,7 @@ PCAN timestamp는 bus monitor가 본 도착 시각이며 SOF나 application rele
 
 원시 TRC와 대용량 per-frame 중간 CSV(`interarrival_samples.csv`, `phase_samples.csv`, `predecessor_context.csv`)는 용량과 공동연구 원본 보호를 이유로 제외했습니다. parser 입력 형식은 루트의 [`sample_data/`](../sample_data)와 같습니다(3-node는 별도 노드가 보내는 ID 0x300–0x30F 배경 frame이 추가됨).
 
-## 7. Attribution 및 공개 상태
+## Attribution 및 공개 상태
 
 이 자료는 루트 저장소와 동일하게 **팀·연구실 공동 연구 자료**입니다. 저장소 소유자가 2026-10-21 공동 연구진의 공개 동의를 확인했습니다. 공개 Git history는 공개 후보 package 시점부터 시작하므로 firmware·분석 source 전체의 최초 작성자를 증명하지 않으며, **공동 연구 source를 단독 저작물로 주장하지 않습니다.** 소프트웨어 license는 선정하지 않았으므로 **All rights reserved**입니다. 실제 TRC, scope 원본, FSP 생성물, 연구실 내부 문서·개인정보 자료는 공개 대상이 아닙니다.
 
