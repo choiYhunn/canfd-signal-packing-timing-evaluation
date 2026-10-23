@@ -3,7 +3,7 @@
 [한국어](README.md) | [English](README.en.md)
 
 > [!IMPORTANT]
-> **This repository records the preliminary campaign from July 2026**, in which the same TX node also sent the dummy load frames. The study was then repeated with a three-node setup and an independent background TX node. That work found a confound: matching the load had also changed the background-traffic generation gap. The conclusion was therefore revised so that large jitter differences between strategies are not attributed to packing, and the result was **submitted** as a full paper to the KSAE 2026 Annual Autumn Conference (Sep 2026). Read the numbers in Section 6 as **early observations**, not the final conclusion. The final study summary is in the [portfolio README](https://github.com/choiYhunn/2026-autonomous-driving-hackathon-portfolio/blob/main/CAN-FD_%EC%8B%A0%ED%98%B8%ED%8C%A8%ED%82%B9_%EC%8B%A4%EC%8B%9C%EA%B0%84%EC%84%B1_%EC%97%B0%EA%B5%AC%28%EC%B5%9C%EC%9A%A9%ED%9B%88%29/README.en.md).
+> **This repository records the preliminary campaign from July 2026**, in which the same TX node also sent the dummy load frames. The study was then repeated with a three-node setup and an independent background TX node. That work found a confound: matching the load had also changed the background-traffic generation gap. The conclusion was therefore revised so that large jitter differences between strategies are not attributed to packing, and the result was **submitted** as a full paper to the KSAE 2026 Annual Autumn Conference (Sep 2026). Read the numbers in Section 6 as **early observations**, not the final conclusion. The three-node re-experiment, the confound checks, and the evidence for the final conclusion are in [`final_campaign/`](final_campaign); the headline numbers of both campaigns can be recomputed from the published summary tables with `python tools/verify_headline_numbers.py`.
 
 > A study evaluating how three packings of the same 64-byte mixed-period workload affect **RX inter-arrival jitter** and model-based reconstructed occupancy, using RA6M5 TX/RX nodes and PCAN traces.
 
@@ -144,6 +144,7 @@ python analysis/scripts/analyze_fixed2_64b_n10.py \
 3. Scope `D_wr2rx` and `D_rx2pwm` are marker-to-marker delays from a separate campaign, not physical PWM edges or pure bus latency.
 4. Same-node dummy traffic does not isolate pure external-node contention.
 5. The study does not establish motor stability, PID oscillation, or real actuator response.
+6. Worst-case response time (WCRT) was not analyzed, and measured PCAN bus load was not stored in the run tables; every load value is reconstructed occupancy.
 
 ## 10. Attribution and Publication Status
 

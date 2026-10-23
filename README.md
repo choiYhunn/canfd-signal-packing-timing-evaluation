@@ -3,7 +3,7 @@
 [한국어](README.md) | [English](README.en.md)
 
 > [!IMPORTANT]
-> **이 저장소는 2026년 7월 초기 실험 캠페인 기록입니다.** 이 캠페인에서는 같은 TX 노드가 부하용 dummy frame도 함께 보냈습니다. 이후 독립 Background TX 노드를 둔 3-node 구성으로 다시 실험했고, 부하를 맞추는 과정에서 배경 트래픽 생성 간격이 함께 달라지는 교란을 확인했습니다. 그래서 전략 간 큰 지터 차이를 패킹 효과로 해석하지 않도록 결론을 고쳤고, 이 결과를 2026 한국자동차공학회 추계학술대회 Full Paper로 **제출(Submitted, 2026-09)**했습니다. 아래 6절 수치는 최종 결론이 아니라 **초기 관찰**로 읽어야 합니다. 최종 연구 요약은 [포트폴리오 README](https://github.com/choiYhunn/2026-autonomous-driving-hackathon-portfolio/blob/main/CAN-FD_%EC%8B%A0%ED%98%B8%ED%8C%A8%ED%82%B9_%EC%8B%A4%EC%8B%9C%EA%B0%84%EC%84%B1_%EC%97%B0%EA%B5%AC%28%EC%B5%9C%EC%9A%A9%ED%9B%88%29/README.md)에 있습니다.
+> **이 저장소는 2026년 7월 초기 실험 캠페인 기록입니다.** 이 캠페인에서는 같은 TX 노드가 부하용 dummy frame도 함께 보냈습니다. 이후 독립 Background TX 노드를 둔 3-node 구성으로 다시 실험했고, 부하를 맞추는 과정에서 배경 트래픽 생성 간격이 함께 달라지는 교란을 확인했습니다. 그래서 전략 간 큰 지터 차이를 패킹 효과로 해석하지 않도록 결론을 고쳤고, 이 결과를 2026 한국자동차공학회 추계학술대회 Full Paper로 **제출(Submitted, 2026-09)**했습니다. 아래 6절 수치는 최종 결론이 아니라 **초기 관찰**로 읽어야 합니다. 3-node 재실험과 교란 확인 과정, 최종 결론의 근거는 [`final_campaign/`](final_campaign)에 있으며, 두 캠페인의 핵심 수치는 `python tools/verify_headline_numbers.py`로 공개 요약표에서 다시 계산할 수 있습니다.
 
 > 동일한 64 B mixed-period workload를 A/B/C 방식으로 패킹했을 때 **RX inter-arrival jitter**와 model 기반 reconstructed occupancy가 어떻게 달라지는지 RA6M5 TX/RX와 PCAN trace로 평가한 연구 저장소입니다.
 
@@ -144,6 +144,7 @@ python analysis/scripts/analyze_fixed2_64b_n10.py \
 3. Scope의 `D_wr2rx`, `D_rx2pwm`은 별도 campaign의 marker-to-marker delay이며 실제 PWM edge나 pure bus latency가 아닙니다.
 4. Same-node dummy traffic은 외부 node 간 contention만을 분리하지 못합니다.
 5. Motor stability, PID 진동과 실제 actuator response를 입증하지 않습니다.
+6. WCRT(최악 응답 시간)는 분석하지 않았고, PCAN 실측 bus load는 run 표에 저장되지 않았습니다(모든 부하 값은 재구성 점유율).
 
 ## 10. Attribution 및 공개 상태
 

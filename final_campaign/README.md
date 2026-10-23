@@ -32,22 +32,50 @@
 
 [`firmware/`](firmware)에는 3-node 구성에 사용한 **사용자 작성 `src` 파일만** 포함합니다 (`hal_entry.c`, `canfd_signalset_64b.h`, 역할 분리용 `three_node_experiment_config.h`). Renesas FSP 생성 트리(`ra/`, `ra_gen/`), 빌드 산출물, 디바이스 바이너리, IDE 메타데이터는 공개 대상이 아닙니다. 자세한 내용은 [`firmware/README.md`](firmware/README.md).
 
-## 4. 관측된 주요 결과 (초기 관찰이 아니라 최종 재실험)
+## 4. 결론까지의 근거 (60 % 목표 부하, 0x100 inter-arrival jitter)
 
-> 수치는 `analysis/n5/3node_n5_analysis.md`, `analysis/timing_mechanism/timing_mechanism_analysis.md`의 요약이며, 원본 TRC가 있어야 재현됩니다.
+아래 수치는 모두 이 저장소의 요약표에서 나온 값이며, [`../tools/verify_headline_numbers.py`](../tools/verify_headline_numbers.py)가 CSV에서 다시 계산해 확인합니다.
 
-- 60-target 반복(n=5) 지터: **A60 30.22 ± 16.02 µs** (run1 outlier가 지배), **B60 61.61 ± 0.28 µs**, **C60 24.78 ± 0.65 µs**.
-- A60 − C60 matched-index 평균 = **+5.45 ± 16.03 µs** (초기 2-node n=10의 +37.7 µs와 달리 run마다 부호가 뒤집힘).
-- 포렌식 분석: 큰 지터는 **배경 gap과 5 ms 주기의 commensurability(beat)**와 연관되며, 다중 프레임 패킹(A·B)은 beat에 취약하고 단일 프레임 패킹(C)은 둔감. 단, PCAN timestamp는 bus-monitor 도착 시각이지 SOF/release가 아니므로 **association(연관)**까지만 주장합니다.
-- 80 % 부하에서는 전략과 무관하게 67–71 µs로 수렴(blocking saturation).
+| 단계 | 조건 | 결과 | 근거 파일 |
+|---|---|---|---|
+| ① 초기 비교 (2-node, n=10) | 배경 frame을 제어 노드가 함께 생성. source 기본 gap A60 240 µs, C60 238 µs | A60 59.764 µs, C60 22.098 µs → **차이 37.667 µs** | [`../analysis/summary_tables/condition_summary.csv`](../analysis/summary_tables/condition_summary.csv) |
+| ② 3-node 반복 (n=5) | 독립 배경 노드. 전략별 nominal gap A 240 / B 235 / C 238 µs | A60 30.22 ± 16.02, B60 61.61 ± 0.28, C60 24.78 ± 0.65 µs. A60은 run1(58.88)만 크고 run2–5는 22.5–23.5. **B60 − C60 = 36.83 µs** | [`analysis/n5/`](analysis/n5) |
+| ③ 같은 전략, gap만 변경 (n=3) | 전략 A만 사용, run마다 보드 리셋, 측정 순서 교란 | gap 238 → **26.37 ± 0.26**, 240 → **56.84 ± 0.16**, 244 → 75.96 ± 0.31, 250 → 21.83 ± 0.25 µs | [`analysis/gap_sweep/confirm/`](analysis/gap_sweep/confirm) |
+| ④ 230–250 µs sweep (A/B/C, gap당 n=1, 탐색용) | 같은 펌웨어에서 배경 gap만 변경 | A: 238 → 242 µs에서 25.49 → **73.57 µs**, 재구성 점유율 −0.95 pp. C도 26.58 → 73.89 µs로 같은 방향 | [`analysis/gap_sweep/response_full/`](analysis/gap_sweep/response_full) |
 
-**말할 수 없는 것:** 중재(arbitration)를 직접 측정한 인과, release/mailbox 대기시간, 단일 요인(프레임 길이 또는 write 수) 단독 인과, C의 보편적 우위. 상세 claim boundary는 각 하위 폴더의 `*.md`에 있습니다.
+해석:
 
-## 5. 재현
+- ③에서 **전략을 고정하고 gap만 2 µs 바꿔도 지터가 약 30 µs 달라졌습니다.** ①·②의 전략 간 차이(약 37 µs)와 같은 크기이므로, 전략마다 gap이 달랐던 비교에서 그 차이를 패킹 효과로 볼 수 없습니다.
+- ④에서 세 전략 모두 gap에 대해 비단조적으로 반응했고, 재구성 점유율은 1 pp 안쪽으로만 변했습니다. 그래서 결론은 **"평균 점유율이 같아도 배경 트래픽의 생성 간격이 다르면 타이밍 조건이 같지 않다"**입니다. 특정 패킹 전략의 우위는 주장하지 않습니다.
+- ②의 nominal gap은 source의 기본값이고, 측정 중 약 ±1 µs를 실시간으로 조정했지만 run별 값은 기록하지 못했습니다([`analysis/n5/3node_n5_analysis.md`](analysis/n5/3node_n5_analysis.md)).
+- [`analysis/timing_mechanism/`](analysis/timing_mechanism)은 timestamp만으로 본 포렌식입니다. B60은 run 간 재현되는 강한 자기상관(ACF ≈ 0.84), C60은 거의 무상관(ACF ≈ 0.07)을 보였지만, 이를 원인으로 설명하던 commensurability 해석은 그 문서 안에서 **철회**했습니다. 연관만 기록합니다.
+- 80 % 목표에서는 세 전략이 67–71 µs로 비슷했습니다(n=5).
 
-각 하위 폴더의 `analyze_*.py`는 비공개 원본 TRC 디렉터리를 입력으로 받습니다. 공개된 것은 분석 script, 요약 table(CSV), 리포트(MD), 파생 그림(PNG)뿐이며, **원시 TRC와 대용량 per-frame 중간 CSV(`interarrival_samples.csv`, `phase_samples.csv`, `predecessor_context.csv`)는 용량·원본 보호를 이유로 제외**했습니다. parser 입력 형식은 루트의 [`sample_data/`](../sample_data)와 동일합니다(3-node는 별도 노드가 보내는 ID 0x300–0x30F 배경 프레임이 추가될 뿐).
+> **정정 (2026-10-23):** 이 절의 이전 버전은 "단일 프레임 패킹(C)은 beat에 둔감"이라고 적었습니다. 이는 철회된 해석에서 온 문장이고, ④에서 C도 gap에 크게 반응하므로 삭제했습니다.
 
-## 6. Attribution 및 공개 상태
+## 5. 측정한 것과 하지 않은 것
+
+| 지표 | 정의 | 이 연구에서 |
+|---|---|---|
+| Inter-arrival jitter | 연속한 0x100 도착 간격의 표준편차 (PCAN listen-only timestamp) | **측정** — 주 지표 |
+| Reconstructed occupancy | frame 길이·bitrate 모델로 계산한 버스 점유율 | **모델 계산** — 측정값 아님 |
+| PCAN Mean Bus Load | 계측기가 표시하는 실측 부하 | **저장 안 함** — gap 보정 때만 참고했고, 세 캠페인 run 표의 실측 부하 열은 모두 비어 있음 |
+| One-way latency | 송신 요청부터 수신까지 | **측정 안 함** |
+| WCRT | 최악 응답 시간 분석 | **하지 않음** |
+
+PCAN timestamp는 bus monitor가 본 도착 시각이며 SOF나 application release 시각이 아닙니다.
+
+## 6. 재현 범위
+
+| 범위 | 공개 자료만으로 | 방법 |
+|---|---|---|
+| README의 핵심 수치 | **가능** | `python tools/verify_headline_numbers.py` (저장소 루트, 표준 라이브러리만) |
+| 요약표·그림 다시 만들기 | 불가 | 각 폴더의 `analyze_*.py`가 비공개 원본 TRC를 입력으로 받음 |
+| 펌웨어 빌드 | 불가 | FSP 생성 트리·프로젝트 설정 미포함 |
+
+원시 TRC와 대용량 per-frame 중간 CSV(`interarrival_samples.csv`, `phase_samples.csv`, `predecessor_context.csv`)는 용량과 공동연구 원본 보호를 이유로 제외했습니다. parser 입력 형식은 루트의 [`sample_data/`](../sample_data)와 같습니다(3-node는 별도 노드가 보내는 ID 0x300–0x30F 배경 frame이 추가됨).
+
+## 7. Attribution 및 공개 상태
 
 이 자료는 루트 저장소와 동일하게 **팀·연구실 공동 연구 자료**입니다. 저장소 소유자가 2026-10-21 공동 연구진의 공개 동의를 확인했습니다. 공개 Git history는 공개 후보 package 시점부터 시작하므로 firmware·분석 source 전체의 최초 작성자를 증명하지 않으며, **공동 연구 source를 단독 저작물로 주장하지 않습니다.** 소프트웨어 license는 선정하지 않았으므로 **All rights reserved**입니다. 실제 TRC, scope 원본, FSP 생성물, 연구실 내부 문서·개인정보 자료는 공개 대상이 아닙니다.
 
@@ -57,6 +85,6 @@
 
 This folder holds the public-safe source and analysis artifacts of the **final (3-node) re-experiment** that followed the repository's initial **2-node** campaign in the root.
 
-In the initial campaign the control TX node also generated the background (dummy) load, so the large receive-jitter differences between packing strategies could not be cleanly attributed to packing. We re-ran the experiment with a dedicated **external Background TX node** (Node1 Control TX / Node2 Background TX / Node3 RX, PCAN Listen-Only) and found that matching bus load also shifts the **background generation gap**, which perturbs arrival jitter through a **commensurability beat** with the 5 ms control period — multi-frame packing (A, B) is beat-susceptible, single-frame packing (C) is not.
+In the initial campaign the control TX node also generated the background (dummy) load, and the background gap differed by strategy (A60 240 µs vs C60 238 µs in the source defaults), so the 37.667 µs A60–C60 jitter difference could not be attributed to packing. We re-ran the experiment with a dedicated **external Background TX node** (Node1 Control TX / Node2 Background TX / Node3 RX, PCAN listen-only). With strategy A fixed, changing only the configured background gap from 238 to 240 µs moved jitter from 26.37 ± 0.26 to 56.84 ± 0.16 µs (n = 3, board reset and permuted order per run) — the same size as the earlier strategy difference. A 230–250 µs sweep gave a strongly non-monotonic response for all three strategies while reconstructed occupancy changed by less than 1 pp (e.g. strategy A, 238 → 242 µs: 25.49 → 73.57 µs, −0.95 pp). Conclusion: average occupancy alone does not establish equivalent timing conditions; no packing strategy is claimed superior. Every number here is recomputed from the published CSVs by `tools/verify_headline_numbers.py`.
 
-Repeated n=5 results at 60 % target: A60 30.22 ± 16.02 µs, B60 61.61 ± 0.28 µs, C60 24.78 ± 0.65 µs; the A60−C60 matched-index mean is +5.45 ± 16.03 µs (vs +37.7 µs in the 2-node n=10 run). All causal language is bounded: PCAN timestamps are bus-monitor arrival times, so only **association** is claimed, not arbitration cause. These results were **submitted** as a Full Paper to the 2026 KSAE Autumn Conference. This is **joint team/lab research** (co-researcher release consent confirmed 2026-10-21); no license is granted (**all rights reserved**), and raw TRC, scope originals, and FSP-generated trees are excluded.
+Measured vs not: inter-arrival jitter is measured from PCAN timestamps; occupancy is reconstructed from a frame-length model; measured PCAN bus load was not stored; one-way latency and WCRT were not measured. A timestamp-only forensic found strong, run-reproducible autocorrelation for B60 and near-white error for C60, but its commensurability explanation was retracted in that document, so only the association is reported. (An earlier version of this summary said single-frame packing was immune to the beat; that came from the retracted interpretation and is contradicted by the sweep.) These results were **submitted** as a Full Paper to the 2026 KSAE Autumn Conference. This is **joint team/lab research** (co-researcher release consent confirmed 2026-10-21); no license is granted (**all rights reserved**), and raw TRC, scope originals, and FSP-generated trees are excluded.
